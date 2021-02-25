@@ -154,6 +154,8 @@
 	
 	<plugin name="cordova-httpd" spec="https://github.com/floatinghotpot/cordova-httpd.git" />
 	
+	<plugin name="cordova-plugin-local-notification" />
+	
 	<edit-config target="NSPhotoLibraryUsageDescription" file="*-Info.plist" mode="merge">
 		<string>Need to access photo library for uploading photos for your account profile and product inquiries.</string>
 	</edit-config>
