@@ -17,7 +17,7 @@
     <feature name="http://api.phonegap.com/1.0/network" />
     <feature name="http://api.phonegap.com/1.0/notification" />
     <platform name="ios">
-    	<preference name="scheme" value="app" />
+    	<preference name="scheme" value="cdvfile" />
 		<preference name="hostname" value="localhost" />
 		
 		<icon src="res/icon/ios/icon-1024.png" width="1024" height="1024"/>
