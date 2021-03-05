@@ -108,6 +108,7 @@
     </platform>
     <icon src="www/icon.png" />
     <access origin="*" />
+    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
