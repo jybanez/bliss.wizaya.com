@@ -5905,6 +5905,9 @@ var Request = this.Request = new Class({
 		xhr.open(method.toUpperCase(), url, this.options.async, this.options.user, this.options.password);
 		if ((this.options.withCredentials) && 'withCredentials' in xhr) {
 			xhr.withCredentials = true;
+			var uri = new URI(window.location);
+			this.headers.Origin = window.location.origin;
+			console.log('Location',window.location);
 			console.log('XHR HEADERS',this.headers);
 		}
 		xhr.onreadystatechange = this.onStateChange.bind(this);
