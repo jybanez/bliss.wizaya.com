@@ -160,7 +160,7 @@
 	<plugin name="cordova-plugin-androidx" />
 	<plugin name="cordova-plugin-androidx-adapter" />
 	
-	<plugin name="cordova-plugin-ios-xhr" spec="https://github.com/globules-io/cordova-plugin-ios-xhr" />
+	<plugin name="cordova-plugin-wkwebview-file-xhr" />
 	
 	<plugin name="cordova-httpd" spec="https://github.com/floatinghotpot/cordova-httpd.git" />
 	
