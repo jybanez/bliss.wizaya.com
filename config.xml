@@ -17,10 +17,8 @@
     <feature name="http://api.phonegap.com/1.0/network" />
     <feature name="http://api.phonegap.com/1.0/notification" />
     <platform name="ios">
-    	<!--
-    	<preference name="scheme" value="cdvfile" />
+    	<preference name="scheme" value="file" />
 		<preference name="hostname" value="localhost" />
-		-->
 		
 		<icon src="res/icon/ios/icon-1024.png" width="1024" height="1024"/>
         <icon src="res/icon/ios/icon-small.png" width="29" height="29"/>
@@ -159,9 +157,9 @@
 
 	<plugin name="cordova-plugin-androidx" />
 	<plugin name="cordova-plugin-androidx-adapter" />
-	
+	<!--
 	<plugin name="cordova-plugin-wkwebview-file-xhr" />
-	
+	-->
 	<plugin name="cordova-httpd" spec="https://github.com/floatinghotpot/cordova-httpd.git" />
 	
 	<plugin name="cordova-plugin-local-notification" />
