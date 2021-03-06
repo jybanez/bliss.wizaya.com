@@ -189,8 +189,9 @@ var App = {
 				var fileName = 'data.json';
 				this.$fileSystem.getEntry('/'+fileName,function(fileEntry){
 					this.$fileSystem.readFile(fileEntry,function(content){
+						this.$data = Json.decode(content);
+						console.log('Cached App Data Found',this.$data);
 						if ($type(onGet)=='function') {
-							this.$data = Json.decode(content);
 							onGet(this.$data);
 						}
 					}.bind(this),onError);
@@ -295,12 +296,14 @@ var App = {
 			var target = url.get('directory')+url.get('file');
 			console.log('App Load Asset',target);
 			this.$fileSystem.getEntry(target,function(fileEntry){
+				console.log('Asset Local Cache',fileEntry);
 				onLoad(fileEntry.toURL());
 			}.bind(this),function(){
 				onLoad(source);
 				this.startSpin('Downloading Updates. Please wait...');
 				new App.Localizer(this.$fileSystem,{
 					onSave:function(item,fileEntry){
+						console.log('Generated Local Cache',target,fileEntry);
 						//onLoad(fileEntry.toURL());
 					}.bind(this),
 					onDownloadComplete:function(){
@@ -328,7 +331,7 @@ var App = {
 						}.bind(this)
 					});					
 					this.loadAsset(data.script,function(scriptUrl){ 
-						//console.log(data.script,scriptUrl);
+						console.log(data.script,scriptUrl);
 						new Asset.javascript(scriptUrl,{
 							onload:function(){
 								$extend(TPH,{
