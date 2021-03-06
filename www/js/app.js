@@ -66,12 +66,13 @@ var App = {
 				onReady:function(instance){
 					this.$fileSystem = instance;
 					this.run();
+					/*
 					return; 
-					
 					this.$fileSystem.clear(function(){
 						this.run();
 					}.bind(this)); 
 					//this.reset();
+					*/
 				}.bind(this)
 			});
 			App.$instance = this;
@@ -316,41 +317,47 @@ var App = {
 			}.bind(this));				
 		},
 		run:function(){
-			this.getData(function(data){
-				console.log('App Data',data);
-				var body = this.$body.appendHTML(data.body,'top');
-				var head = this.$head;
-				//this.startSpin('Updating. Please wait...');
-				this.loadAsset(data.stylesheet,function(styleUrl){
-					console.log(data.stylesheet,styleUrl);
-					new Asset.css(styleUrl,{
-						onload:function(){
-							new Element('style',{
-								type:'text/css'
-							}).inject(head).set('text',data.inlineStyles);		
-						}.bind(this)
-					});					
-					this.loadAsset(data.script,function(scriptUrl){ 
-						console.log(data.script,scriptUrl);
-						new Asset.javascript(scriptUrl,{
+			if (!window.$isOnline) {
+				this.showOffline('No internet connection found. Please check your connection and try again.',function(){
+					this.run();
+				}.bind(this));
+			} else {
+				this.getData(function(data){
+					console.log('App Data',data);
+					var body = this.$body.appendHTML(data.body,'top');
+					var head = this.$head;
+					//this.startSpin('Updating. Please wait...');
+					this.loadAsset(data.stylesheet,function(styleUrl){
+						console.log(data.stylesheet,styleUrl);
+						new Asset.css(styleUrl,{
 							onload:function(){
-								$extend(TPH,{
-									$remote:this.app
-								});
-								//return;
-								new Element('script',{
-									type:'text/javascript'
-								}).inject(head).set('text',data.inlineScripts);	
+								new Element('style',{
+									type:'text/css'
+								}).inject(head).set('text',data.inlineStyles);		
 							}.bind(this)
-						});
-						window.addEvent('onPlatformReady',function(instance){
-							body.removeClass.delay(500,body,['empty']);
-						});
-					}.bind(this));	
-				}.bind(this));				
-			}.bind(this),function(e){
-				console.log(e);
-			}.bind(this));
+						});					
+						this.loadAsset(data.script,function(scriptUrl){ 
+							console.log(data.script,scriptUrl);
+							new Asset.javascript(scriptUrl,{
+								onload:function(){
+									$extend(TPH,{
+										$remote:this.app
+									});
+									//return;
+									new Element('script',{
+										type:'text/javascript'
+									}).inject(head).set('text',data.inlineScripts);	
+								}.bind(this)
+							});
+							window.addEvent('onPlatformReady',function(instance){
+								body.removeClass.delay(500,body,['empty']);
+							});
+						}.bind(this));	
+					}.bind(this));				
+				}.bind(this),function(e){
+					console.log(e);
+				}.bind(this));
+			}
 		}
 	})
 };
