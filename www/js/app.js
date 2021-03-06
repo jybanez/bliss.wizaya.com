@@ -119,7 +119,7 @@ var App = {
 		    	console.log('App Online');
 		    }.bind(this), false);
 			
-			if ($type(onIntialize)=='function') {
+			if ($type(onInitialize)=='function') {
 				onInitialize();
 			}
 		},
