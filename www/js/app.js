@@ -63,7 +63,7 @@ var App = {
 				base:'/'+this.$id,
 				onReady:function(instance){
 					this.$fileSystem = instance;
-					this.initializeNetwork.delay(500,this,function(){
+					this.initializeNetwork.delay(1000,this,function(){
 						this.run();	
 					}.bind(this));
 					/*
@@ -90,6 +90,7 @@ var App = {
 			});
 		},
 		initializeNetwork:function(onInitialize){
+			console.log('Check Internet Connection');
 			var networkState = navigator.connection.type;
 
 		    var states = {};
