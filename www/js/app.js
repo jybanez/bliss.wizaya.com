@@ -51,8 +51,6 @@ var App = {
 			this.$body = document.id(window.document.body);
 			this.$head = document.id(window.document.head);
 			
-			this.initializeNetwork();
-			
 			this.$assets = new Array();
 			this.$isLoaded = new Array();
 			
@@ -65,7 +63,9 @@ var App = {
 				base:'/'+this.$id,
 				onReady:function(instance){
 					this.$fileSystem = instance;
-					this.run();
+					this.initializeNetwork.delay(500,this,function(){
+						this.run();	
+					}.bind(this));
 					/*
 					return; 
 					this.$fileSystem.clear(function(){
@@ -89,7 +89,7 @@ var App = {
 				}
 			});
 		},
-		initializeNetwork:function(){
+		initializeNetwork:function(onInitialize){
 			var networkState = navigator.connection.type;
 
 		    var states = {};
@@ -117,6 +117,10 @@ var App = {
 		    	window.fireEvent('onOnline');
 		    	console.log('App Online');
 		    }.bind(this), false);
+			
+			if ($type(onIntialize)=='function') {
+				onInitialize();
+			}
 		},
 		getFileSystem:function(){
 			return this.$fileSystem;
