@@ -343,6 +343,7 @@ var App = {
 		    });
 			if (!window.$isOnline) {
 				this.showOffline('No internet connection found. Please check your connection and try again.',function(){
+					this.hideOffline();
 					this.updateNetwork();
 					this.run(onRun);
 				}.bind(this));
