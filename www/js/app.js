@@ -130,7 +130,7 @@ var App = {
 		    states[Connection.NONE]     = 'No network connection';
 		    
 		    window.$connection = states[networkState];
-		    window.$isOnline = (window.$connection==Connection.UNKNOWN && device.platform=='browser') || window.$connection!=Connection.NONE;
+		    window.$isOnline = device.platform=='browser'?networkState==Connection.UNKNOWN:networkState!=Connection.NONE;
 		      
 		    console.log(window.$connection,window.$isOnline);
 		    console.log(navigator.connection);
