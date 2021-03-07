@@ -339,7 +339,7 @@ var App = {
 		run:function(onRun){
 			this.showSplash({
 				connection:window.$connection+' - '+(window.$isOnline?'Online':'Offline'),
-		    	version:'v'+version
+		    	version:'v'+this.$version
 		    });
 			if (!window.$isOnline) {
 				this.showOffline('No internet connection found. Please check your connection and try again.',function(){
