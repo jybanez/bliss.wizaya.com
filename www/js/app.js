@@ -22,7 +22,10 @@ var App = {
 	Loader:new Class({
 		Implements:[Events,Options],
 		options:{
-			idleTimer:10000
+			idleTimer:10000,
+			splash:{
+				//message:'Please wait...'
+			}
 		},
 		$assetsUpdated:false,
 		initialize:function(app,options){
@@ -59,15 +62,25 @@ var App = {
 				new App.Interface.Log();	
 			}
 			
+			this.initializeAssets();
+			cordova.getAppVersion.getVersionNumber(function (version) {
+			    this.showSplash({
+			    	footer:'v'+version
+			    });
+			}.bind(this));
+			
 			App.FileSystem.getInstance('TEMPORARY',{
 				base:'/'+this.$id,
 				onReady:function(instance){
 					this.$fileSystem = instance;
+					
 					this.initializeNetwork.delay(1000,this,function(){
-						this.run();	
+						this.run(function(){
+							this.hideSplash();
+						}.bind(this));	
 					}.bind(this));
-					/*
-					return; 
+					
+					/* 
 					this.$fileSystem.clear(function(){
 						this.run();
 					}.bind(this)); 
@@ -88,6 +101,17 @@ var App = {
 					}
 				}
 			});
+		},
+		initializeAssets:function(){
+			this.$splash = this.$body.getElement('.splash.poster');
+			this.$splashTemplate = this.$splash.get('html');
+			this.$splash.empty();
+			
+			this.$offline = this.$body.getElement('.offline.poster');
+			this.$offlineTemplate = this.$offline.get('html');
+			this.$offline.empty();
+			
+			this.$body.empty().removeClass('empty');
 		},
 		initializeNetwork:function(onInitialize){
 			console.log('Check Internet Connection');
@@ -126,28 +150,18 @@ var App = {
 		getFileSystem:function(){
 			return this.$fileSystem;
 		},
-		createOffline:function(onCreate){
-			if (!$defined(this.$offline)) {
-				this.$offline = new Element('div',{'class':'offline'});
-				new Request({
-					method:'get',
-					url:'offline.html',
-					onSuccess:function(response){
-						this.$offlineTemplate = response;
-						onCreate();
-					}.bind(this)
-				}).send();
-			} else {
-				onCreate();
-			}
+		showSplash:function(options){
+			this.$splash.inject(this.$body)
+				.set('html',this.$splashTemplate.substitute($merge(this.options.splash,options)));
+		},
+		hideSplash:function(){
+			this.$splash.destroy();
 		},
 		showOffline:function(message,onRetry){
-			this.createOffline(function(){
-				var button = this.$offline.inject(this.$body).set('html',this.$offlineTemplate.substitute({
-					message:message
-				})).getElement('button');
-				button.addEvent('click',onRetry);
-			}.bind(this));
+			var button = this.$offline.inject(this.$body).set('html',this.$offlineTemplate.substitute({
+				message:message
+			})).getElement('button');
+			button.addEvent('click',onRetry);
 		},
 		hideOffline:function(){
 			if ($defined(this.$offline)) {
@@ -321,10 +335,10 @@ var App = {
 				}]).download();	
 			}.bind(this));				
 		},
-		run:function(){
+		run:function(onRun){
 			if (!window.$isOnline) {
 				this.showOffline('No internet connection found. Please check your connection and try again.',function(){
-					this.run();
+					this.run(onRun);
 				}.bind(this));
 			} else {
 				this.getData(function(data){
@@ -355,8 +369,10 @@ var App = {
 								}.bind(this)
 							});
 							window.addEvent('onPlatformReady',function(instance){
-								body.removeClass.delay(500,body,['empty']);
-							});
+								if ($type(onRun)=='function') {
+									onRun();
+								}
+							}.bind(this));
 						}.bind(this));	
 					}.bind(this));				
 				}.bind(this),function(e){
