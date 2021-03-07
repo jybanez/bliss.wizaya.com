@@ -71,10 +71,6 @@ var App = {
 						this.$fileSystem = instance;
 						
 						this.initializeNetwork.delay(1000,this,function(){
-							this.showSplash({
-								connection:window.$connection+' - '+(window.$isOnline?'Online':'Offline'),
-						    	version:'v'+version
-						    });
 							this.run(function(){
 								this.hideSplash();
 							}.bind(this));	
@@ -116,6 +112,24 @@ var App = {
 			this.$body.empty().removeClass('empty');
 		},
 		initializeNetwork:function(onInitialize){
+			this.updateNetwork();
+		    
+		    document.addEventListener("offline", function(){
+		    	this.updateNetwork();
+		    	window.fireEvent('onOffline');
+		    	console.log('App Offline');
+		    }.bind(this), false);
+		    document.addEventListener("online", function(){
+		    	this.updateNetwork();
+		    	window.fireEvent('onOnline');
+		    	console.log('App Online');
+		    }.bind(this), false);
+			
+			if ($type(onInitialize)=='function') {
+				onInitialize();
+			}
+		},
+		updateNetwork:function(){
 			console.log('Check Internet Connection');
 			var networkState = navigator.connection.type;
 
@@ -131,23 +145,8 @@ var App = {
 		    
 		    window.$connection = states[networkState];
 		    window.$isOnline = device.platform=='browser'?networkState==Connection.UNKNOWN:networkState!=Connection.NONE;
-		      
 		    console.log(window.$connection,window.$isOnline);
 		    console.log(navigator.connection);
-		    document.addEventListener("offline", function(){
-		    	window.$isOnline = false;
-		    	window.fireEvent('onOffline');
-		    	console.log('App Offline');
-		    }.bind(this), false);
-		    document.addEventListener("online", function(){
-		    	window.$isOnline = true;
-		    	window.fireEvent('onOnline');
-		    	console.log('App Online');
-		    }.bind(this), false);
-			
-			if ($type(onInitialize)=='function') {
-				onInitialize();
-			}
 		},
 		getFileSystem:function(){
 			return this.$fileSystem;
@@ -338,8 +337,13 @@ var App = {
 			}.bind(this));				
 		},
 		run:function(onRun){
+			this.showSplash({
+				connection:window.$connection+' - '+(window.$isOnline?'Online':'Offline'),
+		    	version:'v'+version
+		    });
 			if (!window.$isOnline) {
 				this.showOffline('No internet connection found. Please check your connection and try again.',function(){
+					this.updateNetwork();
 					this.run(onRun);
 				}.bind(this));
 			} else {
