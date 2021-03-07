@@ -50,6 +50,21 @@ body.empty .poster {
 	bottom:0;
 	text-align:right;
 }
+.poster .footer>.content {
+	display:table;
+	border-collapse: collapse;
+	width:100%;
+}
+.poster .footer>.content>* {
+	display:table-cell;
+}
+.poster .footer>.content .connection {
+	text-align:left;	
+}
+
+.poster .footer>.content .version {
+	text-align:right;
+}
 .poster .container {
 	display:table;
 	width:100%;

@@ -64,30 +64,32 @@ var App = {
 			
 			this.initializeAssets();
 			cordova.getAppVersion.getVersionNumber(function (version) {
-			    this.showSplash({
-			    	footer:'v'+version
-			    });
+				this.$version = version;
+				App.FileSystem.getInstance('TEMPORARY',{
+					base:'/'+this.$id,
+					onReady:function(instance){
+						this.$fileSystem = instance;
+						
+						this.initializeNetwork.delay(1000,this,function(){
+							this.showSplash({
+								connection:window.$connection+' - '+(window.$isOnline?'Online':'Offline'),
+						    	version:'v'+version
+						    });
+							this.run(function(){
+								this.hideSplash();
+							}.bind(this));	
+						}.bind(this));
+						
+						/* 
+						this.$fileSystem.clear(function(){
+							this.run();
+						}.bind(this)); 
+						//this.reset();
+						*/
+					}.bind(this)
+				});
 			}.bind(this));
 			
-			App.FileSystem.getInstance('TEMPORARY',{
-				base:'/'+this.$id,
-				onReady:function(instance){
-					this.$fileSystem = instance;
-					
-					this.initializeNetwork.delay(1000,this,function(){
-						this.run(function(){
-							this.hideSplash();
-						}.bind(this));	
-					}.bind(this));
-					
-					/* 
-					this.$fileSystem.clear(function(){
-						this.run();
-					}.bind(this)); 
-					//this.reset();
-					*/
-				}.bind(this)
-			});
 			App.$instance = this;
 			 
 			window.addEvents({
