@@ -97,6 +97,8 @@ var App = {
 			});
 		},
 		intro:function(onComplete){
+		    $pick(onComplete,$empty)();
+		    return;
 			if (['android'].contains(device.platform.toLowerCase())) {
 				this.$intro = new Element('video',{
 					controls:false,
