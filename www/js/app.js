@@ -212,7 +212,7 @@ var App = {
 			this.hideOffline();
 			if (window.$isOnline) {
 				this.startSpin('Downloading Updates. Please wait...');
-				new Request({
+				var req = new Request({
 					url:this.app,
 					onSuccess:function(result){
 						if ($type(onRequest)=='function'){
@@ -235,7 +235,9 @@ var App = {
 						}
 						this.stopSpin('No Internet Connection','exclamation');
 					}.bind(this)
-				}).send();
+				});
+				console.log(req);
+				req.send();
 			} else {
 				this.showOffline('Unable to connect to Internet. Please check your internet connection.',function(){
 					this.requestData(onRequest,onError);
