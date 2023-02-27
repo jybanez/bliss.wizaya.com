@@ -5346,7 +5346,8 @@ Shop.App = new Class({
 			},{
 				onComplete:function(result){
 					if (result.status) {
-						$extend(this.app,result.data);
+					    this.app.online = result.data.online;
+						//$extend(this.app,result.data);
 						this.fireEvent('onChangeAppOnlineStatus',[result.data.online,result.data,this]);	
 						Shop.instance.getNotifier().publish(['onChangeAppOnlineStatus'].join('-').clean(),{
 							app:result.data.app,

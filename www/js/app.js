@@ -51,7 +51,7 @@ var App = {
 				if ($defined(cordova.getAppVersion)) {
 					cordova.getAppVersion.getVersionNumber(function (version) {
 						this.$version = version;
-						App.FileSystem.getInstance('TEMPORARY',{
+						App.FileSystem.getInstance('PERSISTENT',{
 							base:'/'+this.$id,
 							onReady:function(instance){
 								this.$fileSystem = instance;
@@ -65,7 +65,7 @@ var App = {
 						});
 					}.bind(this));	
 				} else {
-					App.FileSystem.getInstance('TEMPORARY',{
+					App.FileSystem.getInstance('PERSISTENT',{
 						base:'/'+this.$id,
 						onReady:function(instance){
 							this.$fileSystem = instance;
@@ -97,8 +97,6 @@ var App = {
 			});
 		},
 		intro:function(onComplete){
-		    $pick(onComplete,$empty)();
-		    return;
 			if (['android'].contains(device.platform.toLowerCase())) {
 				this.$intro = new Element('video',{
 					controls:false,
